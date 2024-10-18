@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  connection:
+    restart: always
+    container_name: udp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4500:4500"
+      - "8081:8081"
