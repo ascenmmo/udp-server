@@ -33,11 +33,11 @@ func New(endpoint string, opts ...Option) (cli *ClientJsonRPC) {
 	cli = &ClientJsonRPC{
 		errorDecoder: defaultErrorDecoder,
 		fallbackTTL:  time.Hour * 24,
-		name:         hostname + "_" + "github.com/ascenmmo/udp-connection",
+		name:         hostname + "_" + "github.com/ascenmmo/udp-server",
 	}
 	cli.applyOpts(opts)
 	cli.rpc = jsonrpc.NewClient(endpoint, cli.rpcOpts...)
-	cli.cb = cb.NewCircuitBreaker("github.com/ascenmmo/udp-connection", cli.cbCfg)
+	cli.cb = cb.NewCircuitBreaker("github.com/ascenmmo/udp-server", cli.cbCfg)
 	return
 }
 

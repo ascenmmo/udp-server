@@ -28,7 +28,6 @@ type MiddlewareSetServerSettings interface {
 	WrapSetNotifyServer(m MiddlewareServerSettingsSetNotifyServer)
 
 	WithTrace()
-	WithMetrics()
 	WithLog()
 }
 
@@ -104,10 +103,6 @@ func (srv *serverServerSettings) WrapSetNotifyServer(m MiddlewareServerSettingsS
 
 func (srv *serverServerSettings) WithTrace() {
 	srv.Wrap(traceMiddlewareServerSettings)
-}
-
-func (srv *serverServerSettings) WithMetrics() {
-	srv.Wrap(metricsMiddlewareServerSettings)
 }
 
 func (srv *serverServerSettings) WithLog() {

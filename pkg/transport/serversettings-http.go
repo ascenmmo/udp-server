@@ -37,11 +37,6 @@ func (http *httpServerSettings) WithTrace() *httpServerSettings {
 	return http
 }
 
-func (http *httpServerSettings) WithMetrics() *httpServerSettings {
-	http.svc.WithMetrics()
-	return http
-}
-
 func (http *httpServerSettings) WithErrorHandler(handler ErrorHandler) *httpServerSettings {
 	http.errorHandler = handler
 	return http

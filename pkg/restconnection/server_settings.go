@@ -15,7 +15,7 @@ import (
 )
 
 // @tg http-prefix=api/v1/udp/
-// @tg jsonRPC-server log trace metrics
+// @tg jsonRPC-server log trace
 // @tg tagNoOmitempty
 type ServerSettings interface {
 	// @tg http-headers=token|Token
