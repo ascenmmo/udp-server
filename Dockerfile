@@ -1,4 +1,4 @@
-FROM golang:1.22.5 as builder
+FROM golang:1.23.2 as builder
 
 RUN mkdir -p $GOPATH/src
 WORKDIR $GOPATH/src
