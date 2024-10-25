@@ -28,6 +28,7 @@ var (
 	udpAddr = env.ServerAddress + ":" + env.UDPPort
 	token   = env.TokenKey
 )
+var hash = ""
 
 var ctx, cancel = context.WithCancel(context.Background())
 var min, max time.Duration
@@ -125,6 +126,7 @@ func createToken(t *testing.T, i int) string {
 }
 
 func createRoom(t *testing.T, token string) {
+	hash = token
 	cli := udpGameServer.New(baseURl)
 	err := cli.ServerSettings().CreateRoom(context.Background(), token, types.CreateRoomRequest{})
 	assert.Nil(t, err, "client.do expected nil")
@@ -132,7 +134,7 @@ func createRoom(t *testing.T, token string) {
 
 func buildMessage(t *testing.T, i, j int) (msg []byte) {
 	data := Message{
-		Text:      fmt.Sprintf("отправила горутина:%d \t номер сообщения: %d", i, j),
+		Text:      fmt.Sprintf("отправила горутина:%d \t номер сообщения: %d %s %s %s", i, j, token, token, token),
 		CreatedAt: time.Now(),
 	}
 	if j > msgs/2 {

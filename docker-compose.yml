@@ -8,5 +8,5 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4500:4500"
+      - "4500:4500/udp"
       - "8081:8081"

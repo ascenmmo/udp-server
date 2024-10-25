@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	bufferSize = 4096
+	bufferSize = 4096 * 10 * 10
 )
 
 type WorkerUDP struct {
