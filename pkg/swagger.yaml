@@ -1,0 +1,565 @@
+openapi: 3.0.0
+servers:
+    - {}
+paths:
+    /api/v1/udp/serverSettings/createRoom:
+        post:
+            tags:
+                - ServerSettings
+            summary: CreateRoom
+            parameters:
+                - in: header
+                  name: Token
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    example: 1
+                                    oneOf:
+                                        - type: number
+                                        - type: string
+                                          format: uuid
+                                jsonrpc:
+                                    type: string
+                                    example: "2.0"
+                                params:
+                                    $ref: '#/components/schemas/requestServerSettingsCreateRoom'
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - type: object
+                                      properties:
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+                                        result:
+                                            $ref: '#/components/schemas/responseServerSettingsCreateRoom'
+                                    - type: object
+                                      properties:
+                                        error:
+                                            type: object
+                                            properties:
+                                                code:
+                                                    type: number
+                                                    format: int32
+                                                    example: -32603
+                                                data:
+                                                    type: object
+                                                    nullable: true
+                                                message:
+                                                    type: string
+                                                    example: not found
+                                            nullable: true
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+    /api/v1/udp/serverSettings/getConnectionsNum:
+        post:
+            tags:
+                - ServerSettings
+            summary: GetConnectionsNum
+            parameters:
+                - in: header
+                  name: Token
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    example: 1
+                                    oneOf:
+                                        - type: number
+                                        - type: string
+                                          format: uuid
+                                jsonrpc:
+                                    type: string
+                                    example: "2.0"
+                                params:
+                                    $ref: '#/components/schemas/requestServerSettingsGetConnectionsNum'
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - type: object
+                                      properties:
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+                                        result:
+                                            $ref: '#/components/schemas/responseServerSettingsGetConnectionsNum'
+                                    - type: object
+                                      properties:
+                                        error:
+                                            type: object
+                                            properties:
+                                                code:
+                                                    type: number
+                                                    format: int32
+                                                    example: -32603
+                                                data:
+                                                    type: object
+                                                    nullable: true
+                                                message:
+                                                    type: string
+                                                    example: not found
+                                            nullable: true
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+    /api/v1/udp/serverSettings/getGameResults:
+        post:
+            tags:
+                - ServerSettings
+            summary: GetGameResults
+            parameters:
+                - in: header
+                  name: Token
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    example: 1
+                                    oneOf:
+                                        - type: number
+                                        - type: string
+                                          format: uuid
+                                jsonrpc:
+                                    type: string
+                                    example: "2.0"
+                                params:
+                                    $ref: '#/components/schemas/requestServerSettingsGetGameResults'
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - type: object
+                                      properties:
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+                                        result:
+                                            $ref: '#/components/schemas/responseServerSettingsGetGameResults'
+                                    - type: object
+                                      properties:
+                                        error:
+                                            type: object
+                                            properties:
+                                                code:
+                                                    type: number
+                                                    format: int32
+                                                    example: -32603
+                                                data:
+                                                    type: object
+                                                    nullable: true
+                                                message:
+                                                    type: string
+                                                    example: not found
+                                            nullable: true
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+    /api/v1/udp/serverSettings/getServerSettings:
+        post:
+            tags:
+                - ServerSettings
+            summary: GetServerSettings
+            parameters:
+                - in: header
+                  name: Token
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    example: 1
+                                    oneOf:
+                                        - type: number
+                                        - type: string
+                                          format: uuid
+                                jsonrpc:
+                                    type: string
+                                    example: "2.0"
+                                params:
+                                    $ref: '#/components/schemas/requestServerSettingsGetServerSettings'
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - type: object
+                                      properties:
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+                                        result:
+                                            $ref: '#/components/schemas/responseServerSettingsGetServerSettings'
+                                    - type: object
+                                      properties:
+                                        error:
+                                            type: object
+                                            properties:
+                                                code:
+                                                    type: number
+                                                    format: int32
+                                                    example: -32603
+                                                data:
+                                                    type: object
+                                                    nullable: true
+                                                message:
+                                                    type: string
+                                                    example: not found
+                                            nullable: true
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+    /api/v1/udp/serverSettings/healthCheck:
+        post:
+            tags:
+                - ServerSettings
+            summary: HealthCheck
+            parameters:
+                - in: header
+                  name: Token
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    example: 1
+                                    oneOf:
+                                        - type: number
+                                        - type: string
+                                          format: uuid
+                                jsonrpc:
+                                    type: string
+                                    example: "2.0"
+                                params:
+                                    $ref: '#/components/schemas/requestServerSettingsHealthCheck'
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - type: object
+                                      properties:
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+                                        result:
+                                            $ref: '#/components/schemas/responseServerSettingsHealthCheck'
+                                    - type: object
+                                      properties:
+                                        error:
+                                            type: object
+                                            properties:
+                                                code:
+                                                    type: number
+                                                    format: int32
+                                                    example: -32603
+                                                data:
+                                                    type: object
+                                                    nullable: true
+                                                message:
+                                                    type: string
+                                                    example: not found
+                                            nullable: true
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+    /api/v1/udp/serverSettings/setNotifyServer:
+        post:
+            tags:
+                - ServerSettings
+            summary: SetNotifyServer
+            parameters:
+                - in: header
+                  name: Token
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    example: 1
+                                    oneOf:
+                                        - type: number
+                                        - type: string
+                                          format: uuid
+                                jsonrpc:
+                                    type: string
+                                    example: "2.0"
+                                params:
+                                    $ref: '#/components/schemas/requestServerSettingsSetNotifyServer'
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                oneOf:
+                                    - type: object
+                                      properties:
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+                                        result:
+                                            $ref: '#/components/schemas/responseServerSettingsSetNotifyServer'
+                                    - type: object
+                                      properties:
+                                        error:
+                                            type: object
+                                            properties:
+                                                code:
+                                                    type: number
+                                                    format: int32
+                                                    example: -32603
+                                                data:
+                                                    type: object
+                                                    nullable: true
+                                                message:
+                                                    type: string
+                                                    example: not found
+                                            nullable: true
+                                        id:
+                                            example: 1
+                                            oneOf:
+                                                - type: number
+                                                - type: string
+                                                  format: uuid
+                                        jsonrpc:
+                                            type: string
+                                            example: "2.0"
+components:
+    schemas:
+        requestServerSettingsCreateRoom:
+            type: object
+            properties:
+                createRoom:
+                    $ref: '#/components/schemas/types.CreateRoomRequest'
+        requestServerSettingsGetConnectionsNum:
+            type: object
+        requestServerSettingsGetGameResults:
+            type: object
+        requestServerSettingsGetServerSettings:
+            type: object
+        requestServerSettingsHealthCheck:
+            type: object
+        requestServerSettingsSetNotifyServer:
+            type: object
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                url:
+                    type: string
+        responseServerSettingsCreateRoom:
+            type: object
+        responseServerSettingsGetConnectionsNum:
+            type: object
+            properties:
+                countConn:
+                    type: number
+                    format: int
+                exists:
+                    type: boolean
+        responseServerSettingsGetGameResults:
+            type: object
+            properties:
+                gameConfigResults:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/types.GameConfigResults'
+                    nullable: true
+        responseServerSettingsGetServerSettings:
+            type: object
+            properties:
+                settings:
+                    $ref: '#/components/schemas/types.Settings'
+        responseServerSettingsHealthCheck:
+            type: object
+            properties:
+                exists:
+                    type: boolean
+        responseServerSettingsSetNotifyServer:
+            type: object
+        types.CreateRoomRequest:
+            type: object
+            properties:
+                game_configs:
+                    $ref: '#/components/schemas/types.GameConfigs'
+        types.GameConfigResults:
+            type: object
+            properties:
+                game_id:
+                    type: string
+                    format: uuid
+                result:
+                    type: object
+                    additionalProperties:
+                        type: object
+                        nullable: true
+                room_id:
+                    type: string
+                    format: uuid
+        types.GameConfigs:
+            type: object
+            properties:
+                game_id:
+                    type: string
+                    format: uuid
+                sorting_config:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/types.SortingConfig'
+                    nullable: true
+        types.ParamMetadata:
+            type: object
+            properties:
+                column_name:
+                    type: string
+                value_type:
+                    type: string
+        types.Settings:
+            type: object
+            properties:
+                connectionPort:
+                    type: string
+                maxConnections:
+                    type: number
+                    format: int
+                maxRequestPerSecond:
+                    type: number
+                    format: int
+                serverAddress:
+                    type: string
+                serverPort:
+                    type: string
+                serverType:
+                    type: string
+        types.SortingConfig:
+            type: object
+            properties:
+                name:
+                    type: string
+                params:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/types.ParamMetadata'
+                    nullable: true
+                result_name:
+                    type: string
+                result_type:
+                    type: string
+                use_on_server_type:
+                    type: string
