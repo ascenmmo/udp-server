@@ -2,7 +2,7 @@
 
 ## Русская версия
 
-Для русскоязычных пользователей документацию можно найти [здесь](https://github.com/ascenmmo/udp-connection/blob/stage/RU_README.md).
+Для русскоязычных пользователей документацию можно найти [здесь](https://github.com/ascenmmo/udp-server/blob/master/RU_README.md).
 
 ## Description
 
@@ -16,18 +16,6 @@ This project is a high-load **UDP service** designed for connecting game clients
 - **Flexibility and Scalability**: Configurable to suit your needs and easily scalable.
 
 ## Installation
-
-### Installation via Binary
-
-1. **Download the latest release** from [GitHub Releases](link_to_release).
-2. **Choose the appropriate binary** for your operating system:
-    - For **Linux**: `udp-linux-amd64`
-    - For **Windows**: `udp-windows-amd64.exe`
-    - For **macOS**: `udp-darwin-amd64`
-3. **Run the binary file**:
-   ```bash
-   ./udp-linux-amd64
-   ```
 
 ### Installation via Docker
 
