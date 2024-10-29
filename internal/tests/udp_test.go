@@ -53,14 +53,14 @@ func TestConnection(t *testing.T) {
 	logger := zerolog.Logger{}
 
 	go start.StartUDP(
-		ctx,
+		context.Background(),
 		env.ServerAddress,
 		env.TCPPort,
 		env.UDPPort,
 		env.TokenKey,
 		msgs*clients,
 		2,
-		3,
+		10,
 		logger)
 	time.Sleep(time.Second * 1)
 
@@ -70,7 +70,8 @@ func TestConnection(t *testing.T) {
 		go Publisher(t, i)
 	}
 	<-ctx.Done()
-
+	time.Sleep(time.Second * 5)
+	getDeleteRooms(t)
 	fmt.Println(max, min, maxMsgs)
 }
 
@@ -125,10 +126,36 @@ func createToken(t *testing.T, i int) string {
 	return token
 }
 
-func createRoom(t *testing.T, token string) {
-	hash = token
+func createRoom(t *testing.T, userToken string) {
+	hash = userToken
 	cli := udpGameServer.New(baseURl)
-	err := cli.ServerSettings().CreateRoom(context.Background(), token, types.CreateRoomRequest{})
+
+	tokenGen, err := tokengenerator.NewTokenGenerator(token)
+	info, err := tokenGen.ParseToken(userToken)
+	if err != nil {
+		panic(err)
+	}
+
+	err = cli.ServerSettings().CreateRoom(context.Background(), userToken, types.CreateRoomRequest{
+		types.GameConfigs{
+			GameID:   info.GameID,
+			IsExists: true,
+			SortingConfig: []types.SortingConfig{
+				{
+					Name:            "IncrementResult",
+					UseOnServerType: "udp",
+					ResultName:      "TestData",
+					ResultType:      "int",
+					Params: []types.ParamMetadata{
+						{
+							ColumnName: "text",
+							ValueType:  "string",
+						},
+					},
+				},
+			},
+		},
+	})
 	assert.Nil(t, err, "client.do expected nil")
 }
 
@@ -198,5 +225,18 @@ func listen(t *testing.T, conn *net.UDPConn) int {
 			max = sub
 		}
 
+	}
+}
+
+func getDeleteRooms(t *testing.T) {
+	cli := udpGameServer.New(baseURl)
+	time.Sleep(time.Second * 5)
+	results, err := cli.ServerSettings().GetGameResults(context.Background(), createToken(t, 0))
+	if err != nil {
+		fmt.Println("getDeleteRooms err", err)
+		return
+	}
+	for _, result := range results {
+		fmt.Println(result.RoomID, result.Result)
 	}
 }
