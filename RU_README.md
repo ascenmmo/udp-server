@@ -1,7 +1,7 @@
 # Высоконагруженный UDP-сервис для игровых клиентов
 
 ## English Version
-For English-speaking users, you can find the documentation [here](https://github.com/ascenmmo/udp-connection/blob/stage/README.md).
+For English-speaking users, you can find the documentation [here](https://github.com/ascenmmo/udp-server/blob/master/README.md).
 
 
 ## Описание

@@ -2,7 +2,7 @@
 
 ## Русская версия
 
-Для русскоязычных пользователей документацию можно найти [здесь](https://github.com/ascenmmo/udp-connection/blob/stage/RU_README.md).
+Для русскоязычных пользователей документацию можно найти [здесь](https://github.com/ascenmmo/udp-server/blob/master/RU_README.md).
 
 ## Description
 
