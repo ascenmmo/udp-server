@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	tokengenerator "github.com/ascenmmo/token-generator/token_generator"
 	tokentype "github.com/ascenmmo/token-generator/token_type"
 	"github.com/ascenmmo/udp-server/internal/connection"
@@ -11,7 +10,6 @@ import (
 	"github.com/ascenmmo/udp-server/pkg/errors"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
-	"time"
 )
 
 type Service interface {
@@ -184,11 +182,5 @@ func NewService(token tokengenerator.TokenGenerator, storage memoryDB.IMemoryDB,
 		token:          token,
 		logger:         logger,
 	}
-	go func() {
-		ticker := time.NewTicker(time.Second * 3)
-		for range ticker.C {
-			logger.Info().Msg(fmt.Sprintf("count connections: %d \t max conections: %d", srv.storage.CountConnection(), srv.maxConnections))
-		}
-	}()
 	return srv
 }
