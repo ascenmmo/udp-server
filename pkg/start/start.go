@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, token string, udpRateLimit int, dataTTL time.Duration, logger zerolog.Logger, LogWithMemoryUseage bool) (err error) {
+func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, token string, udpRateLimit int, dataTTL time.Duration, logger zerolog.Logger, logWithMemoryUsage bool) (err error) {
 	ramDB := memoryDB.NewMemoryDb(ctx, dataTTL)
 	rateLimitDB := memoryDB.NewMemoryDb(ctx, 1)
 
@@ -43,7 +43,7 @@ func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, toke
 
 	go newUDP.Sender(ctx)
 
-	if LogWithMemoryUseage {
+	if logWithMemoryUsage {
 		logMemoryUsage(logger)
 	}
 
