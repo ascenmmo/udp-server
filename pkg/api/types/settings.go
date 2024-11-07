@@ -1,7 +1,6 @@
 package types
 
 import (
-	"fmt"
 	"github.com/ascenmmo/udp-server/env"
 	"runtime"
 )
@@ -32,9 +31,6 @@ func CountConnectionsMAX() int {
 	runtime.ReadMemStats(&memStats)
 
 	connections := calculateConnections(numCPUs, memStats.Sys)
-	fmt.Printf("Количество CPU: %d\n", numCPUs)
-	fmt.Printf("Объем оперативной памяти: %d MB\n", memStats.Sys/(1024*1024))
-	fmt.Printf("Рекомендуемое количество соединений по UDP: %d\n", connections)
 
 	return connections
 }
