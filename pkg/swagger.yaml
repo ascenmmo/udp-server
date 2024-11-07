@@ -148,79 +148,6 @@ paths:
                                         jsonrpc:
                                             type: string
                                             example: "2.0"
-    /api/v1/udp/serverSettings/getGameResults:
-        post:
-            tags:
-                - ServerSettings
-            summary: GetGameResults
-            parameters:
-                - in: header
-                  name: Token
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                id:
-                                    example: 1
-                                    oneOf:
-                                        - type: number
-                                        - type: string
-                                          format: uuid
-                                jsonrpc:
-                                    type: string
-                                    example: "2.0"
-                                params:
-                                    $ref: '#/components/schemas/requestServerSettingsGetGameResults'
-            responses:
-                "200":
-                    description: Successful operation
-                    content:
-                        application/json:
-                            schema:
-                                oneOf:
-                                    - type: object
-                                      properties:
-                                        id:
-                                            example: 1
-                                            oneOf:
-                                                - type: number
-                                                - type: string
-                                                  format: uuid
-                                        jsonrpc:
-                                            type: string
-                                            example: "2.0"
-                                        result:
-                                            $ref: '#/components/schemas/responseServerSettingsGetGameResults'
-                                    - type: object
-                                      properties:
-                                        error:
-                                            type: object
-                                            properties:
-                                                code:
-                                                    type: number
-                                                    format: int32
-                                                    example: -32603
-                                                data:
-                                                    type: object
-                                                    nullable: true
-                                                message:
-                                                    type: string
-                                                    example: not found
-                                            nullable: true
-                                        id:
-                                            example: 1
-                                            oneOf:
-                                                - type: number
-                                                - type: string
-                                                  format: uuid
-                                        jsonrpc:
-                                            type: string
-                                            example: "2.0"
     /api/v1/udp/serverSettings/getServerSettings:
         post:
             tags:
@@ -449,8 +376,6 @@ components:
                     $ref: '#/components/schemas/types.CreateRoomRequest'
         requestServerSettingsGetConnectionsNum:
             type: object
-        requestServerSettingsGetGameResults:
-            type: object
         requestServerSettingsGetServerSettings:
             type: object
         requestServerSettingsHealthCheck:
@@ -473,14 +398,6 @@ components:
                     format: int
                 exists:
                     type: boolean
-        responseServerSettingsGetGameResults:
-            type: object
-            properties:
-                gameConfigResults:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/types.GameConfigResults'
-                    nullable: true
         responseServerSettingsGetServerSettings:
             type: object
             properties:
@@ -495,41 +412,6 @@ components:
             type: object
         types.CreateRoomRequest:
             type: object
-            properties:
-                game_configs:
-                    $ref: '#/components/schemas/types.GameConfigs'
-        types.GameConfigResults:
-            type: object
-            properties:
-                game_id:
-                    type: string
-                    format: uuid
-                result:
-                    type: object
-                    additionalProperties:
-                        type: object
-                        nullable: true
-                room_id:
-                    type: string
-                    format: uuid
-        types.GameConfigs:
-            type: object
-            properties:
-                game_id:
-                    type: string
-                    format: uuid
-                sorting_config:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/types.SortingConfig'
-                    nullable: true
-        types.ParamMetadata:
-            type: object
-            properties:
-                column_name:
-                    type: string
-                value_type:
-                    type: string
         types.Settings:
             type: object
             properties:
@@ -546,20 +428,4 @@ components:
                 serverPort:
                     type: string
                 serverType:
-                    type: string
-        types.SortingConfig:
-            type: object
-            properties:
-                name:
-                    type: string
-                params:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/types.ParamMetadata'
-                    nullable: true
-                result_name:
-                    type: string
-                result_type:
-                    type: string
-                use_on_server_type:
                     type: string

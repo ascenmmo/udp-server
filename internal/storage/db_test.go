@@ -3,7 +3,7 @@ package memoryDB
 import (
 	"context"
 	"fmt"
-	"github.com/ascenmmo/udp-server/internal/entities"
+	"github.com/ascenmmo/udp-server/pkg/api/types"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"strconv"
@@ -84,7 +84,7 @@ func TestSetDataTraceCheck(t *testing.T) {
 	setNewRoomData(db)
 	data, ok := db.GetData("1")
 	assert.True(t, ok)
-	room := data.(*entities.Room)
+	room := data.(*types.Room)
 
 	fmt.Println(room)
 	oldID := room.RoomID
@@ -99,7 +99,7 @@ func updateData(db *MemoryDb) {
 	if !ok {
 		panic("data not found")
 	}
-	room := data.(*entities.Room)
+	room := data.(*types.Room)
 
 	room.RoomID = uuid.New()
 	room.GameID = uuid.New()
@@ -111,11 +111,11 @@ func updateData(db *MemoryDb) {
 }
 
 func setNewRoomData(db *MemoryDb) {
-	room := entities.Room{
+	room := types.Room{
 		RoomID: uuid.New(),
 		GameID: uuid.New(),
 	}
-	room.SetUser(&entities.User{
+	room.SetUser(&types.User{
 		ID: uuid.New(),
 	})
 

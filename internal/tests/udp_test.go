@@ -2,13 +2,12 @@ package tests
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	tokengenerator "github.com/ascenmmo/token-generator/token_generator"
 	tokentype "github.com/ascenmmo/token-generator/token_type"
 	"github.com/ascenmmo/udp-server/env"
+	"github.com/ascenmmo/udp-server/pkg/api/types"
 	"github.com/ascenmmo/udp-server/pkg/clients/udpGameServer"
-	"github.com/ascenmmo/udp-server/pkg/restconnection/types"
 	"github.com/ascenmmo/udp-server/pkg/start"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
@@ -16,52 +15,38 @@ import (
 	"net"
 	"os"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 )
 
 var (
 	clients = 20
-	msgs    = 1000
+	msgs    = 100
 
 	baseURl = "http://" + env.ServerAddress + ":" + env.TCPPort
 	udpAddr = env.ServerAddress + ":" + env.UDPPort
 	token   = env.TokenKey
 )
-var hash = ""
 
 var ctx, cancel = context.WithCancel(context.Background())
 var min, max time.Duration
 var maxMsgs int
-
-type Message struct {
-	Text      string    `json:"text"`
-	CreatedAt time.Time `json:"createdAt"`
-}
-
-type Request struct {
-	Token string  `json:"token,omitempty"`
-	Data  Message `json:"data,omitempty"`
-}
-
-type Response struct {
-	Data Message
-}
 
 func TestConnection(t *testing.T) {
 	//logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 	logger := zerolog.Logger{}
 
 	go start.StartUDP(
-		context.Background(),
+		ctx,
 		env.ServerAddress,
 		env.TCPPort,
 		env.UDPPort,
 		env.TokenKey,
 		msgs*clients,
 		2,
-		10,
-		logger)
+		logger,
+		false)
 	time.Sleep(time.Second * 1)
 
 	for i := 0; i < clients; i++ {
@@ -70,37 +55,49 @@ func TestConnection(t *testing.T) {
 		go Publisher(t, i)
 	}
 	<-ctx.Done()
-	time.Sleep(time.Second * 5)
-	getDeleteRooms(t)
+
 	fmt.Println(max, min, maxMsgs)
 }
 
 func Publisher(t *testing.T, i int) {
 	connection := newConnection(t, i)
+	for j := 0; j < 10; j++ {
+		msg := createToken(t, i)
+		_, err := connection.Write([]byte(msg))
+		assert.NoError(t, err)
+	}
+	time.Sleep(time.Second * 1)
 	for j := 0; j < msgs; j++ {
 		if ctx.Err() != nil {
 			return
 		}
 		msg := buildMessage(t, i, j)
+
 		_, err := connection.Write(msg)
 		assert.NoError(t, err)
+
+		msg = buildMessageWithTime(t)
+		_, err = connection.Write(msg)
+		assert.NoError(t, err)
+
+		time.Sleep(time.Millisecond * 1)
 	}
 }
 
 func Listener(t *testing.T, i int) {
 	defer cancel()
 	connection := newConnection(t, i)
-	for j := 0; j < msgs; j++ {
+	for j := 0; j < 10; j++ {
 		if ctx.Err() != nil {
 			return
 		}
-		msg := buildMessage(t, i, j)
-		_, err := connection.Write(msg)
+		msg := createToken(t, i)
+		_, err := connection.Write([]byte(msg))
 		assert.NoError(t, err)
 	}
 	response := listen(t, connection)
 	fmt.Println("done pubSub", i, "with msgs", response)
-
+	time.Sleep(time.Second * 5)
 }
 
 func createToken(t *testing.T, i int) string {
@@ -120,64 +117,29 @@ func createToken(t *testing.T, i int) string {
 		RoomID: roomID,
 		UserID: userID,
 		TTL:    time.Second * 100,
-	}, tokengenerator.AESGCM)
+	}, tokengenerator.JWT)
 	assert.Nil(t, err, "gen token expected nil")
 
 	return token
 }
 
-func createRoom(t *testing.T, userToken string) {
-	hash = userToken
+func createRoom(t *testing.T, token string) {
 	cli := udpGameServer.New(baseURl)
-
-	tokenGen, err := tokengenerator.NewTokenGenerator(token)
-	info, err := tokenGen.ParseToken(userToken)
-	if err != nil {
-		panic(err)
-	}
-
-	err = cli.ServerSettings().CreateRoom(context.Background(), userToken, types.CreateRoomRequest{
-		types.GameConfigs{
-			GameID:   info.GameID,
-			IsExists: true,
-			SortingConfig: []types.SortingConfig{
-				{
-					Name:            "IncrementResult",
-					UseOnServerType: "udp",
-					ResultName:      "TestData",
-					ResultType:      "int",
-					Params: []types.ParamMetadata{
-						{
-							ColumnName: "text",
-							ValueType:  "string",
-						},
-					},
-				},
-			},
-		},
-	})
+	err := cli.ServerSettings().CreateRoom(context.Background(), token, types.CreateRoomRequest{})
 	assert.Nil(t, err, "client.do expected nil")
 }
 
 func buildMessage(t *testing.T, i, j int) (msg []byte) {
-	data := Message{
-		Text:      fmt.Sprintf("отправила горутина:%d \t номер сообщения: %d %s %s %s", i, j, token, token, token),
-		CreatedAt: time.Now(),
-	}
+	msg = []byte(fmt.Sprintf("token:%sотправила горутина:%d \t номер сообщения: %d", createToken(t, i), i, j))
 	if j > msgs/2 {
-		data = Message{
-			Text:      "close",
-			CreatedAt: time.Now(),
-		}
+		msg = []byte("close")
 	}
+	return msg
+}
 
-	req := Request{
-		Token: createToken(t, i),
-		Data:  data,
-	}
-	marshal, err := json.Marshal(req)
-	assert.Nil(t, err, "client.do expected nil")
-	return marshal
+func buildMessageWithTime(t *testing.T) (msg []byte) {
+	msg = []byte(time.Now().Format(time.RFC3339Nano))
+	return msg
 }
 
 func newConnection(t *testing.T, i int) *net.UDPConn {
@@ -204,18 +166,32 @@ func listen(t *testing.T, conn *net.UDPConn) int {
 		assert.Nil(t, err, "ReadFromUDP expected nil")
 
 		msg := buf[:n]
-		var res Response
-		err = json.Unmarshal(msg, &res)
-		assert.Nil(t, err, "Unmarshal expected nil")
+		if len(msg) == 36 {
+			continue
+		}
 		counter++
 		maxMsgs++
-		if res.Data.Text == "close" {
+		if string(msg) == "close" {
+			return counter
+		}
+		if strings.Contains(string(msg), "close") {
 			return counter
 		}
 
-		sub := time.Now().Sub(res.Data.CreatedAt)
+		parse, err := time.Parse(time.RFC3339Nano, string(msg))
+		if err != nil {
+			continue
+		}
+
+		timeNow, err := time.Parse(time.RFC3339Nano, time.Now().UTC().Format(time.RFC3339Nano))
+		if err != nil {
+			continue
+		}
+
+		sub := timeNow.Sub(parse)
+
 		if min == 0 {
-			min = sub
+			min = time.Duration(time.Now().Unix())
 		}
 		if min > sub {
 			min = sub
@@ -225,18 +201,5 @@ func listen(t *testing.T, conn *net.UDPConn) int {
 			max = sub
 		}
 
-	}
-}
-
-func getDeleteRooms(t *testing.T) {
-	cli := udpGameServer.New(baseURl)
-	time.Sleep(time.Second * 5)
-	results, err := cli.ServerSettings().GetGameResults(context.Background(), createToken(t, 0))
-	if err != nil {
-		fmt.Println("getDeleteRooms err", err)
-		return
-	}
-	for _, result := range results {
-		fmt.Println(result.RoomID, result.Result)
 	}
 }
