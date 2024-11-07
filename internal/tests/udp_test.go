@@ -76,6 +76,10 @@ func Publisher(t *testing.T, i int) {
 		_, err := connection.Write(msg)
 		assert.NoError(t, err)
 
+		msg = buildMessageWithTime(t)
+		_, err = connection.Write(msg)
+		assert.NoError(t, err)
+
 		time.Sleep(time.Millisecond * 1)
 	}
 }
@@ -134,7 +138,7 @@ func buildMessage(t *testing.T, i, j int) (msg []byte) {
 }
 
 func buildMessageWithTime(t *testing.T) (msg []byte) {
-	msg = []byte(time.Now().UTC().String())
+	msg = []byte(time.Now().Format(time.RFC3339Nano))
 	return msg
 }
 
@@ -174,23 +178,28 @@ func listen(t *testing.T, conn *net.UDPConn) int {
 			return counter
 		}
 
-		_, err = time.Parse(time.RFC3339, string(msg[:8]))
+		parse, err := time.Parse(time.RFC3339Nano, string(msg))
 		if err != nil {
-			fmt.Println(string(msg))
 			continue
 		}
 
-		//sub := time.Now().UTC().Sub(parse)
-		//if min == 0 {
-		//	min = sub
-		//}
-		//if min > sub {
-		//	min = sub
-		//}
-		//
-		//if max < sub {
-		//	max = sub
-		//}
+		timeNow, err := time.Parse(time.RFC3339Nano, time.Now().UTC().Format(time.RFC3339Nano))
+		if err != nil {
+			continue
+		}
+
+		sub := timeNow.Sub(parse)
+
+		if min == 0 {
+			min = time.Duration(time.Now().Unix())
+		}
+		if min > sub {
+			min = sub
+		}
+
+		if max < sub {
+			max = sub
+		}
 
 	}
 }
