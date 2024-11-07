@@ -2,7 +2,6 @@ package memoryDB
 
 import (
 	"context"
-	"github.com/rs/zerolog"
 	"sync"
 	"time"
 )
@@ -22,8 +21,6 @@ type MemoryDb struct {
 	userData    *userData
 	connections *connections
 	dataTTL     time.Duration
-
-	logger zerolog.Logger
 }
 
 type rowType struct {
