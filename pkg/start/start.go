@@ -11,10 +11,11 @@ import (
 	"github.com/ascenmmo/udp-server/internal/utils"
 	"github.com/ascenmmo/udp-server/pkg/transport"
 	"github.com/rs/zerolog"
+	"runtime"
 	"time"
 )
 
-func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, token string, udpRateLimit int, dataTTL time.Duration, logger zerolog.Logger) (err error) {
+func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, token string, udpRateLimit int, dataTTL time.Duration, logger zerolog.Logger, LogWithMemoryUseage bool) (err error) {
 	ramDB := memoryDB.NewMemoryDb(ctx, dataTTL)
 	rateLimitDB := memoryDB.NewMemoryDb(ctx, 1)
 
@@ -42,6 +43,10 @@ func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, toke
 
 	go newUDP.Sender(ctx)
 
+	if LogWithMemoryUseage {
+		logMemoryUsage(logger)
+	}
+
 	go func() {
 		serverSettings := tcp.NewServerSettings(utils.NewRateLimit(10, rateLimitDB), newService)
 
@@ -61,4 +66,20 @@ func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, toke
 	err = <-errors
 
 	return err
+}
+
+func logMemoryUsage(logger zerolog.Logger) {
+	ticker := time.NewTicker(time.Second * 10)
+	go func() {
+		for range ticker.C {
+			var stats runtime.MemStats
+			runtime.ReadMemStats(&stats)
+			logger.Info().
+				Interface("num cpu", runtime.NumCPU()).
+				Interface("Memory Usage", stats.Alloc/1024/1024).
+				Interface("TotalAlloc", stats.TotalAlloc/1024/1024).
+				Interface("Sys", stats.Sys/1024/1024).
+				Interface("NumGC", stats.NumGC)
+		}
+	}()
 }

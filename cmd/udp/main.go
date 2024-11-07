@@ -22,7 +22,8 @@ func main() {
 		env.TokenKey,
 		env.MaxRequestPerSecond,
 		5,
-		logger)
+		logger,
+		true)
 	if err != nil {
 		logger.Fatal().Err(err).Msg("failed to start UDP server")
 	}

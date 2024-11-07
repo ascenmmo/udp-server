@@ -45,7 +45,8 @@ func TestConnection(t *testing.T) {
 		env.TokenKey,
 		msgs*clients,
 		2,
-		logger)
+		logger,
+		false)
 	time.Sleep(time.Second * 1)
 
 	for i := 0; i < clients; i++ {
