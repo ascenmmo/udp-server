@@ -1,8 +1,7 @@
-package entities
+package types
 
 import (
 	"github.com/ascenmmo/udp-server/internal/connection"
-	"github.com/ascenmmo/udp-server/pkg/restconnection/types"
 	"github.com/google/uuid"
 	"sync"
 	"time"
@@ -15,8 +14,6 @@ type Room struct {
 	ServerID []uuid.UUID
 
 	Users []*User
-
-	GameConfigs types.GameConfigs
 
 	UpdatedAt time.Time
 	mtx       sync.RWMutex

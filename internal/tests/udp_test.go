@@ -6,8 +6,8 @@ import (
 	tokengenerator "github.com/ascenmmo/token-generator/token_generator"
 	tokentype "github.com/ascenmmo/token-generator/token_type"
 	"github.com/ascenmmo/udp-server/env"
+	"github.com/ascenmmo/udp-server/pkg/api/types"
 	"github.com/ascenmmo/udp-server/pkg/clients/udpGameServer"
-	"github.com/ascenmmo/udp-server/pkg/restconnection/types"
 	"github.com/ascenmmo/udp-server/pkg/start"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
@@ -45,7 +45,6 @@ func TestConnection(t *testing.T) {
 		env.TokenKey,
 		msgs*clients,
 		2,
-		3,
 		logger)
 	time.Sleep(time.Second * 1)
 
@@ -174,11 +173,11 @@ func listen(t *testing.T, conn *net.UDPConn) int {
 			return counter
 		}
 
-		//parse, err := time.Parse(time.RFC3339, string(msg[:8]))
-		//if err != nil {
-		//	fmt.Println(string(msg))
-		//	continue
-		//}
+		_, err = time.Parse(time.RFC3339, string(msg[:8]))
+		if err != nil {
+			fmt.Println(string(msg))
+			continue
+		}
 
 		//sub := time.Now().UTC().Sub(parse)
 		//if min == 0 {

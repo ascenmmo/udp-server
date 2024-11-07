@@ -2,7 +2,7 @@ package memoryDB
 
 import (
 	"context"
-	"fmt"
+	"github.com/rs/zerolog"
 	"runtime"
 	"sync"
 	"time"
@@ -23,6 +23,8 @@ type MemoryDb struct {
 	userData    *userData
 	connections *connections
 	dataTTL     time.Duration
+
+	logger zerolog.Logger
 }
 
 type rowType struct {
@@ -38,16 +40,6 @@ type userData struct {
 type connections struct {
 	storage sync.Map
 	count   int
-}
-
-func NewMemoryDb(ctx context.Context, dataTTL time.Duration) *MemoryDb {
-	db := &MemoryDb{
-		userData:    &userData{storage: sync.Map{}},
-		connections: &connections{storage: sync.Map{}},
-		dataTTL:     dataTTL,
-	}
-	go db.Run(ctx)
-	return db
 }
 
 func (db *MemoryDb) GetData(key string) (any, bool) {
@@ -134,6 +126,21 @@ func (db *MemoryDb) removeOldData() {
 func (db *MemoryDb) logMemoryUsage() {
 	var stats runtime.MemStats
 	runtime.ReadMemStats(&stats)
-	fmt.Printf("Memory Usage: Alloc = %v MiB, TotalAlloc = %v MiB, Sys = %v MiB, NumGC = %v\n",
-		stats.Alloc/1024/1024, stats.TotalAlloc/1024/1024, stats.Sys/1024/1024, stats.NumGC)
+	db.logger.Info().
+		Interface("num cpu", runtime.NumCPU()).
+		Interface("Memory Usage", stats.Alloc/1024/1024).
+		Interface("TotalAlloc", stats.TotalAlloc/1024/1024).
+		Interface("Sys", stats.Sys/1024/1024).
+		Interface("NumGC", stats.NumGC)
+}
+
+func NewMemoryDb(ctx context.Context, dataTTL time.Duration, logger zerolog.Logger) *MemoryDb {
+	db := &MemoryDb{
+		userData:    &userData{storage: sync.Map{}},
+		connections: &connections{storage: sync.Map{}},
+		dataTTL:     dataTTL,
+		logger:      logger,
+	}
+	go db.Run(ctx)
+	return db
 }

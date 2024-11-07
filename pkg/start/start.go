@@ -7,7 +7,6 @@ import (
 	"github.com/ascenmmo/udp-server/internal/handler/tcp"
 	"github.com/ascenmmo/udp-server/internal/handler/udp"
 	"github.com/ascenmmo/udp-server/internal/service"
-	configsService "github.com/ascenmmo/udp-server/internal/service/configs_service"
 	memoryDB "github.com/ascenmmo/udp-server/internal/storage"
 	"github.com/ascenmmo/udp-server/internal/utils"
 	"github.com/ascenmmo/udp-server/pkg/transport"
@@ -15,9 +14,8 @@ import (
 	"time"
 )
 
-func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, token string, udpRateLimit int, dataTTL, gameConfigResultsTTl time.Duration, logger zerolog.Logger) (err error) {
+func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, token string, udpRateLimit int, dataTTL time.Duration, logger zerolog.Logger) (err error) {
 	ramDB := memoryDB.NewMemoryDb(ctx, dataTTL)
-	gameConfigResultsDB := memoryDB.NewMemoryDb(ctx, gameConfigResultsTTl)
 	rateLimitDB := memoryDB.NewMemoryDb(ctx, 1)
 
 	tokenGen, err := tokengenerator.NewTokenGenerator(token)
@@ -25,8 +23,7 @@ func StartUDP(ctx context.Context, address string, tcpPort, udpPort string, toke
 		return err
 	}
 
-	gameConfigsService := configsService.NewGameConfigsService(gameConfigResultsDB, tokenGen)
-	newService := service.NewService(tokenGen, ramDB, gameConfigsService, logger)
+	newService := service.NewService(tokenGen, ramDB, logger)
 
 	errors := make(chan error)
 
