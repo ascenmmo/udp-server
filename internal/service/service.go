@@ -110,7 +110,12 @@ func (s *service) setNewUser(ds connection.DataSender, req []byte) (clientInfo *
 
 	roomData, ok := s.storage.GetData(roomKey)
 	if !ok {
-		return clientInfo, errors.ErrRoomNotFound
+		room := &types.Room{
+			GameID: clientInfo.GameID,
+			RoomID: clientInfo.RoomID,
+		}
+		s.setRoom(*clientInfo, room)
+		roomData = room
 	}
 
 	room, ok := roomData.(*types.Room)

@@ -21,7 +21,7 @@ func main() {
 		env.UDPPort,
 		env.TokenKey,
 		env.MaxRequestPerSecond,
-		5,
+		10,
 		logger,
 		true)
 	if err != nil {
