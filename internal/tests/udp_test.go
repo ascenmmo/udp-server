@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	clients = 20
+	clients = 2000
 	msgs    = 100
 
 	baseURl = "http://" + env.ServerAddress + ":" + env.TCPPort
@@ -50,7 +50,7 @@ func TestConnection(t *testing.T) {
 	time.Sleep(time.Second * 1)
 
 	for i := 0; i < clients; i++ {
-		//createRoom(t, createToken(t, i))
+		createRoom(t, createToken(t, i))
 		go Listener(t, i)
 		go Publisher(t, i)
 	}
