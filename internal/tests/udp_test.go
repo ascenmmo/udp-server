@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	clients = 20
+	clients = 2000
 	msgs    = 100
 
 	baseURl = "http://" + env.ServerAddress + ":" + env.TCPPort
