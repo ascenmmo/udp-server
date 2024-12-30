@@ -11,7 +11,6 @@ package api
 import (
 	"context"
 	"github.com/ascenmmo/udp-server/pkg/api/types"
-	"github.com/google/uuid"
 )
 
 // ServerSettings
@@ -33,5 +32,5 @@ type ServerSettings interface {
 	CreateRoom(ctx context.Context, token string, createRoom types.CreateRoomRequest) (err error)
 	// @tg http-headers=token|Token
 	// @tg summary=`SetNotifyServer`
-	SetNotifyServer(ctx context.Context, token string, id uuid.UUID, url string) (err error)
+	GetDeletedRooms(token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error)
 }
