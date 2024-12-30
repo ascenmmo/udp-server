@@ -152,7 +152,7 @@ paths:
         post:
             tags:
                 - ServerSettings
-            summary: SetNotifyServer
+            summary: GetDeletedRooms
             parameters:
                 - in: header
                   name: Token
