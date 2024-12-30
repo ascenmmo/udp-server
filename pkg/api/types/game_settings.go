@@ -6,10 +6,10 @@ import (
 )
 
 type CreateRoomRequest struct {
-	RoomTTl time.Duration
+	RoomTTl time.Duration `json:"roomTTl"`
 }
 
 type GetDeletedRooms struct {
-	GameID uuid.UUID
-	RoomID uuid.UUID
+	GameID uuid.UUID `json:"gameID"`
+	RoomID uuid.UUID `json:"roomID"`
 }
