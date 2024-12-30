@@ -48,7 +48,7 @@ func (r *ServerSettings) CreateRoom(ctx context.Context, token string, createRoo
 	return
 }
 
-func (r *ServerSettings) GetDeletedRooms(token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
+func (r *ServerSettings) GetDeletedRooms(ctx context.Context, token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
 	return r.server.GetDeletedRooms(token, ids)
 }
 

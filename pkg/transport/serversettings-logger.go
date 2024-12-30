@@ -103,7 +103,7 @@ func (m loggerServerSettings) CreateRoom(ctx context.Context, token string, crea
 	return m.next.CreateRoom(ctx, token, createRoom)
 }
 
-func (m loggerServerSettings) GetDeletedRooms(token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
+func (m loggerServerSettings) GetDeletedRooms(ctx context.Context, token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
 	logger := log.Ctx(ctx).With().Str("service", "ServerSettings").Str("method", "getDeletedRooms").Logger()
 	defer func(begin time.Time) {
 		logHandle := func(ev *zerolog.Event) {
@@ -122,5 +122,5 @@ func (m loggerServerSettings) GetDeletedRooms(token string, ids []types.GetDelet
 		}
 		logger.Info().Func(logHandle).Msg("call getDeletedRooms")
 	}(time.Now())
-	return m.next.GetDeletedRooms(token, ids)
+	return m.next.GetDeletedRooms(ctx, token, ids)
 }

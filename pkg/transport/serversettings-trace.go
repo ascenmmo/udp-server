@@ -40,8 +40,8 @@ func (svc traceServerSettings) CreateRoom(ctx context.Context, token string, cre
 	return svc.next.CreateRoom(ctx, token, createRoom)
 }
 
-func (svc traceServerSettings) GetDeletedRooms(token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
+func (svc traceServerSettings) GetDeletedRooms(ctx context.Context, token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
 	span := opentracing.SpanFromContext(ctx)
 	span.SetTag("method", "GetDeletedRooms")
-	return svc.next.GetDeletedRooms(token, ids)
+	return svc.next.GetDeletedRooms(ctx, token, ids)
 }

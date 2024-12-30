@@ -237,7 +237,7 @@ func (cli *ClientServerSettings) ReqCreateRoom(ctx context.Context, callback ret
 	return
 }
 
-func (cli *ClientServerSettings) GetDeletedRooms(token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
+func (cli *ClientServerSettings) GetDeletedRooms(ctx context.Context, token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
 
 	request := requestServerSettingsGetDeletedRooms{
 		Ids:   ids,

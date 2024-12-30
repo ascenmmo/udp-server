@@ -64,8 +64,8 @@ func (srv *serverServerSettings) CreateRoom(ctx context.Context, token string, c
 	return srv.createRoom(ctx, token, createRoom)
 }
 
-func (srv *serverServerSettings) GetDeletedRooms(token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
-	return srv.getDeletedRooms(token, ids)
+func (srv *serverServerSettings) GetDeletedRooms(ctx context.Context, token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error) {
+	return srv.getDeletedRooms(ctx, token, ids)
 }
 
 func (srv *serverServerSettings) WrapGetConnectionsNum(m MiddlewareServerSettingsGetConnectionsNum) {

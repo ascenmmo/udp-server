@@ -32,5 +32,5 @@ type ServerSettings interface {
 	CreateRoom(ctx context.Context, token string, createRoom types.CreateRoomRequest) (err error)
 	// @tg http-headers=token|Token
 	// @tg summary=`SetNotifyServer`
-	GetDeletedRooms(token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error)
+	GetDeletedRooms(ctx context.Context, token string, ids []types.GetDeletedRooms) (deletedIds []types.GetDeletedRooms, err error)
 }
