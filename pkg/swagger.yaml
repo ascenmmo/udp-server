@@ -18,6 +18,10 @@ paths:
                     application/json:
                         schema:
                             type: object
+                            required:
+                                - id
+                                - jsonrpc
+                                - result
                             properties:
                                 id:
                                     example: 1
@@ -38,6 +42,10 @@ paths:
                             schema:
                                 oneOf:
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - result
                                       properties:
                                         id:
                                             example: 1
@@ -51,6 +59,10 @@ paths:
                                         result:
                                             $ref: '#/components/schemas/responseServerSettingsCreateRoom'
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - error
                                       properties:
                                         error:
                                             type: object
@@ -65,7 +77,6 @@ paths:
                                                 message:
                                                     type: string
                                                     example: not found
-                                            nullable: true
                                         id:
                                             example: 1
                                             oneOf:
@@ -91,6 +102,10 @@ paths:
                     application/json:
                         schema:
                             type: object
+                            required:
+                                - id
+                                - jsonrpc
+                                - result
                             properties:
                                 id:
                                     example: 1
@@ -111,6 +126,10 @@ paths:
                             schema:
                                 oneOf:
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - result
                                       properties:
                                         id:
                                             example: 1
@@ -124,6 +143,10 @@ paths:
                                         result:
                                             $ref: '#/components/schemas/responseServerSettingsGetConnectionsNum'
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - error
                                       properties:
                                         error:
                                             type: object
@@ -138,7 +161,6 @@ paths:
                                                 message:
                                                     type: string
                                                     example: not found
-                                            nullable: true
                                         id:
                                             example: 1
                                             oneOf:
@@ -164,6 +186,10 @@ paths:
                     application/json:
                         schema:
                             type: object
+                            required:
+                                - id
+                                - jsonrpc
+                                - result
                             properties:
                                 id:
                                     example: 1
@@ -184,6 +210,10 @@ paths:
                             schema:
                                 oneOf:
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - result
                                       properties:
                                         id:
                                             example: 1
@@ -197,6 +227,10 @@ paths:
                                         result:
                                             $ref: '#/components/schemas/responseServerSettingsGetDeletedRooms'
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - error
                                       properties:
                                         error:
                                             type: object
@@ -211,7 +245,6 @@ paths:
                                                 message:
                                                     type: string
                                                     example: not found
-                                            nullable: true
                                         id:
                                             example: 1
                                             oneOf:
@@ -237,6 +270,10 @@ paths:
                     application/json:
                         schema:
                             type: object
+                            required:
+                                - id
+                                - jsonrpc
+                                - result
                             properties:
                                 id:
                                     example: 1
@@ -257,6 +294,10 @@ paths:
                             schema:
                                 oneOf:
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - result
                                       properties:
                                         id:
                                             example: 1
@@ -270,6 +311,10 @@ paths:
                                         result:
                                             $ref: '#/components/schemas/responseServerSettingsGetServerSettings'
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - error
                                       properties:
                                         error:
                                             type: object
@@ -284,7 +329,6 @@ paths:
                                                 message:
                                                     type: string
                                                     example: not found
-                                            nullable: true
                                         id:
                                             example: 1
                                             oneOf:
@@ -310,6 +354,10 @@ paths:
                     application/json:
                         schema:
                             type: object
+                            required:
+                                - id
+                                - jsonrpc
+                                - result
                             properties:
                                 id:
                                     example: 1
@@ -330,6 +378,10 @@ paths:
                             schema:
                                 oneOf:
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - result
                                       properties:
                                         id:
                                             example: 1
@@ -343,6 +395,10 @@ paths:
                                         result:
                                             $ref: '#/components/schemas/responseServerSettingsHealthCheck'
                                     - type: object
+                                      required:
+                                        - id
+                                        - jsonrpc
+                                        - error
                                       properties:
                                         error:
                                             type: object
@@ -357,7 +413,6 @@ paths:
                                                 message:
                                                     type: string
                                                     example: not found
-                                            nullable: true
                                         id:
                                             example: 1
                                             oneOf:
@@ -371,6 +426,8 @@ components:
     schemas:
         requestServerSettingsCreateRoom:
             type: object
+            required:
+                - createRoom
             properties:
                 createRoom:
                     $ref: '#/components/schemas/types.CreateRoomRequest'
@@ -378,6 +435,8 @@ components:
             type: object
         requestServerSettingsGetDeletedRooms:
             type: object
+            required:
+                - ids
             properties:
                 ids:
                     type: array
@@ -392,6 +451,9 @@ components:
             type: object
         responseServerSettingsGetConnectionsNum:
             type: object
+            required:
+                - countConn
+                - exists
             properties:
                 countConn:
                     type: number
@@ -400,6 +462,8 @@ components:
                     type: boolean
         responseServerSettingsGetDeletedRooms:
             type: object
+            required:
+                - deletedIds
             properties:
                 deletedIds:
                     type: array
@@ -408,11 +472,15 @@ components:
                     nullable: true
         responseServerSettingsGetServerSettings:
             type: object
+            required:
+                - settings
             properties:
                 settings:
                     $ref: '#/components/schemas/types.Settings'
         responseServerSettingsHealthCheck:
             type: object
+            required:
+                - exists
             properties:
                 exists:
                     type: boolean
